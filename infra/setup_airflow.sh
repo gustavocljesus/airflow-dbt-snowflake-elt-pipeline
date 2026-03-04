@@ -35,10 +35,10 @@ mkdir -p ~/airflow
 cd ~/airflow
 
 echo "Baixando docker-compose do Airflow..."
-curl -LfO 'https://airflow.apache.org/docs/apache-airflow/stable/docker-compose.yaml'
+curl -LfO 'https://airflow.apache.org/docs/apache-airflow/3.1.7/docker-compose.yaml'
 
 echo "Criando diretórios..."
-mkdir -p dags logs plugins
+mkdir -p ./dags ./logs ./plugins ./config
 
 echo "Criando arquivo .env..."
 echo "AIRFLOW_UID=$(id -u)" > .env
