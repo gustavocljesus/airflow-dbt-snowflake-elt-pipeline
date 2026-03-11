@@ -65,3 +65,8 @@ CREATE TABLE vendas (
     data_inclusao TIMESTAMP_LTZ,
     data_atualizacao TIMESTAMP_LTZ
 );
+
+CREATE TABLE controle_ingestao(
+    tabela VARCHAR(50),
+    ultima_carga TIMESTAMP_LTZ
+)
