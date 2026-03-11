@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from airflow.decorators import dag, task
 from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook
 from src.loaders.snowflake_load import load_incremental_data
@@ -32,15 +32,15 @@ def postgres_to_snowflake_elt():
         'vendas'
     ]
     
-    @task(task_id = 'get_max_id')
-    def get_max_primary_key(table_name: str):
+    @task(task_id = 'get_last_date')
+    def get_last_date_ingestion(table_name: str):
         hook = SnowflakeHook(snowflake_conn_id = 'snowflake').get_conn()
             
         with hook as conn:
             with conn.cursor() as cursor:
-                cursor.execute(f'SELECT MAX(id_{table_name}) FROM {table_name}')
-                max_id = cursor.fetchone()[0]
-                return max_id if max_id is not None else 0 
+                cursor.execute(f"SELECT ultima_carga FROM controle_ingestao WHERE tabela = '{table_name}'")
+                last_date = cursor.fetchone()[0]
+                return last_date if last_date is not None else datetime(2024, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
         
     @task(task_id = 'load_data_tables')
     def load(table_name, max_id):
