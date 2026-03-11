@@ -11,7 +11,7 @@ def extract_data_postgres(table_name: str, last_date: str):
             columns_list = ', '.join(columns)
             placeholders = ', '.join(['%s'] * len(columns))
 
-            pg_cursor.execute(f"SELECT {columns_list} FROM {table_name} WHERE data_inclusao >= {last_date}")
+            pg_cursor.execute(f"SELECT {columns_list} FROM {table_name} WHERE data_inclusao > {last_date}")
             rows = pg_cursor.fetchall()
 
             return rows, columns_list, placeholders
