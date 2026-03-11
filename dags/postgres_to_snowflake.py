@@ -46,6 +46,23 @@ def postgres_to_snowflake_elt():
     def load(table_name, max_id):
         load_incremental_data(table_name, max_id)
 
+    @task(task_id = 'update_control_table')
+    def update_date_ingestion(table_name: str):
+        hook = SnowflakeHook(snowflake_conn_id = 'snowflake').get_conn()
+
+        with hook as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(f"""
+                MERGE INTO controle_ingestao AS ci
+                USING (SELECT '{table_name}' AS tabela) src
+                ON ci.tabela = src.tabela
+                WHEN MATCHED THEN 
+                    UPDATE SET ci.ultima_carga = CURRENT_TIMESTAMP
+                WHEN NOT MATCHED THEN 
+                    INSERT (tabela, ultima_carga) 
+                    VALUES ('{table_name}', CURRENT_TIMESTAMP)
+            """)
+    
     for table_name in table_names:
         max_id = get_max_primary_key(table_name)
         load(table_name, max_id)
