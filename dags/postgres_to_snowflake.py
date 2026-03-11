@@ -64,7 +64,8 @@ def postgres_to_snowflake_elt():
             """)
     
     for table_name in table_names:
-        max_id = get_max_primary_key(table_name)
-        load(table_name, max_id)
+        last_date = get_last_date_ingestion(table_name)
+        load(table_name, last_date)
+        update_date_ingestion(table_name)
 
 postgres_to_snowflake_elt_dag = postgres_to_snowflake_elt()
