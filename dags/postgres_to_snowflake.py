@@ -45,8 +45,8 @@ def postgres_to_snowflake_elt():
         update_date_ingestion(table_name)
           
     for table_name in table_names:
-        last_date = get_last_date_ingestion(table_name)
+        last_date = get_last_date(table_name)
         load(table_name, last_date)
-        update_date_ingestion(table_name)
+        update_control_table(table_name)
 
 postgres_to_snowflake_elt_dag = postgres_to_snowflake_elt()
