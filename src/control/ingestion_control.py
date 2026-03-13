@@ -11,7 +11,7 @@ def get_last_date_ingestion(table_name: str):
                                FROM controle_ingestao 
                                WHERE tabela = %s 
                                """,
-                               (table_name)
+                               (table_name,)
                                )
                 last_date = cursor.fetchone()
                 return last_date[0] if last_date is not None else datetime(2024, 1, 1, tzinfo=timezone.utc)
