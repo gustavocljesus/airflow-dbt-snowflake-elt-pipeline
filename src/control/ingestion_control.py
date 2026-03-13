@@ -13,8 +13,8 @@ def get_last_date_ingestion(table_name: str):
                                """,
                                (table_name)
                                )
-                last_date = cursor.fetchone()[0]
-                return last_date if last_date is not None else datetime(2024, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+                last_date = cursor.fetchone()
+                return last_date[0] if last_date is not None else datetime(2024, 1, 1, tzinfo=timezone.utc)
 
 def update_date_ingestion(table_name: str):
         hook = SnowflakeHook(snowflake_conn_id = 'snowflake').get_conn()
