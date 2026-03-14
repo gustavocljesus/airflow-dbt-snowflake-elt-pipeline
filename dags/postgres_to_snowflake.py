@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from airflow.decorators import dag, task
-from src.loaders.snowflake_load import load_incremental_data
+from src.ingestion.loaders.snowflake_load import load_incremental_data
 from src.control.ingestion_control import get_last_date_ingestion, update_date_ingestion
 
 default_args = {
