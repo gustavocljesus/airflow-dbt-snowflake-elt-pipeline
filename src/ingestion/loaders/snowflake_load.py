@@ -1,5 +1,5 @@
 from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook
-from ingestion.postgres_extractor import extract_data_postgres
+from src.ingestion.extract.postgres_extractor import extract_data_postgres
 
 def load_incremental_data(table_name: str, last_date: str):
     hook = SnowflakeHook(snowflake_conn_id = 'snowflake').get_conn()
