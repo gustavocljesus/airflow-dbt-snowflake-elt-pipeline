@@ -1,1 +1,11 @@
+# python
+__pycache__/
+*.pyc
 .venv/
+
+# dbt
+target/
+dbt_packages/
+
+# logs
+logs/
