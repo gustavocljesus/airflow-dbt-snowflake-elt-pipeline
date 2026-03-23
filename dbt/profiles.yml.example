@@ -1,0 +1,13 @@
+dbt:
+  target: dev
+  outputs:
+    dev:
+      type: 
+      account: 
+      user: 
+      password: 
+      role: 
+      database: 
+      warehouse: 
+      schema: 
+      threads: 
