@@ -51,6 +51,7 @@ def postgres_to_snowflake_elt():
         last_date = get_last_date.override(task_id=f"get_last_date_{table_name}")(table_name)
         loaded = load.override(task_id=f"load_{table_name}")(table_name, last_date)
         updated = update_control_table.override(task_id=f"update_control_table_{table_name}")(table_name)
+        loaded >> updated
         all_done.append(updated)
 
     dbt_task = transformation()
