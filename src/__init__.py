@@ -3,6 +3,6 @@
 from src.control.ingestion_control import get_last_date_ingestion, update_date_ingestion
 from src.ingestion.extract.postgres_extractor import extract_data_postgres
 from src.ingestion.loaders.snowflake_load import load_incremental_data
-from src.transform.dbt_run import transformation
+from src.transform.dbt_build import transformation
 
 __all__ = ["get_last_date_ingestion", "update_date_ingestion", "extract_data_postgres", "load_incremental_data", "transformation"]
