@@ -69,4 +69,4 @@ CREATE TABLE vendas (
 CREATE TABLE controle_ingestao(
     tabela VARCHAR(50),
     ultima_carga TIMESTAMP_LTZ
-)
+);
