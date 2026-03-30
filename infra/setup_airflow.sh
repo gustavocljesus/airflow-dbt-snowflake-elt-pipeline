@@ -39,10 +39,5 @@ echo "AIRFLOW_UID=$(id -u)" > .env
 echo "Inicializando Airflow..."
 sudo docker compose up airflow-init
 
-if [ $? -ne 0 ]; then
-    echo "ERRO: airflow-init falhou. Verifique os logs acima."
-    exit 1
-fi
-
 echo "Subindo containers..."
 sudo docker compose up -d
