@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "Atualizando sistema..."
-sudo apt update && sudo apt upgrade -y
-
-echo "Instalando git..."
-sudo apt install -y git   
-
 echo "Instalando dependências..."
 sudo apt install -y ca-certificates curl gnupg lsb-release
 
@@ -37,7 +31,7 @@ echo "Baixando docker-compose do Airflow..."
 curl -LfO 'https://airflow.apache.org/docs/apache-airflow/3.1.7/docker-compose.yaml'
 
 echo "Criando diretórios..."
-mkdir -p ./logs ./plugins ./config   
+mkdir -p ./dags ./logs ./plugins ./config   
 
 echo "Criando arquivo .env..."
 echo "AIRFLOW_UID=$(id -u)" > .env
@@ -52,8 +46,3 @@ fi
 
 echo "Subindo containers..."
 sudo docker compose up -d
-
-echo "-------------------------------------"
-echo "Airflow disponível em:"
-echo "http://SEU_IP_PUBLICO:8080"
-echo "-------------------------------------"
