@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+echo "Atualizando a lista de pacotes do APT..."
+sudo apt update && sudo apt upgrade -y
+
 echo "Instalando dependências..."
 sudo apt install -y ca-certificates curl gnupg lsb-release
 
