@@ -11,8 +11,8 @@ cp ./requirements.txt ~/airflow/
 
 echo "Movendo pastas..."
 
-cp -r ./src/ ~/airflow/
-cp -r ./dbt/ ~/airflow/
+cp -r ./src/ ~/airflow/dags/
+cp -r ./dbt/ ~/airflow/dags/
 
 echo "-------------------------------------"
 echo "Airflow disponível em:"
