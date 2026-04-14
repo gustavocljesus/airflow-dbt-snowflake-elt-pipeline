@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from airflow.decorators import dag, task
+from airflow.sdk import dag, task
 from src.ingestion.loaders.snowflake_load import load_incremental_data
 from src.control.ingestion_control import get_last_date_ingestion, update_date_ingestion
 from src.transform.dbt_build import transformation
