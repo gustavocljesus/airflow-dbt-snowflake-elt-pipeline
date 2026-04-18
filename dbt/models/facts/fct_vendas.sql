@@ -6,8 +6,9 @@ WITH vendas AS (
         con.concessionaria_sk,
         ve.vendedor_sk,
         c.cliente_sk,
+        to_date(v.data_venda) AS data_venda_id,
         v.valor_venda, 
-        v.data_venda,
+        v.data_venda AS data_venda_ts,
         v.data_inclusao,
         v.data_atualizacao
     FROM {{ ref('stg_vendas') }} v
@@ -27,8 +28,9 @@ SELECT
     concessionaria_sk,
     vendedor_sk,
     cliente_sk,
+    data_venda_id,
     valor_venda,
-    data_venda,
+    data_venda_ts,
     data_inclusao,
     data_atualizacao
 FROM vendas
