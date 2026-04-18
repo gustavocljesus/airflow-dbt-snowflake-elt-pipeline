@@ -3,7 +3,7 @@ version: 2
 sources:
     - name: sources
       database: NOVADRIVE
-      schema: STAGE
+      schema: RAW
       tables:
         - name: cidades
         - name: clientes
