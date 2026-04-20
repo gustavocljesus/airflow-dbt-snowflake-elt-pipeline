@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 from airflow.sdk import dag, task
+from airflow.providers.standard.operators.bash import BashOperator
 from src.ingestion.loaders.snowflake_load import load_incremental_data
 from src.control.ingestion_control import get_last_date_ingestion, update_date_ingestion
-from src.transform.dbt_build import transformation
 
 default_args = {
     'owner' : 'airflow',
@@ -54,7 +54,9 @@ def postgres_to_snowflake_elt():
         loaded >> updated
         all_done.append(updated)
 
-    dbt_task = transformation()
-    dbt_task.set_upstream(all_done)
+    dbt_task = BashOperator(task_id="dbt_build",
+                        bash_command="cd /opt/airflow/dags/dbt && dbt deps --profiles-dir /opt/airflow/dags/dbt && dbt build --profiles-dir /opt/airflow/dags/dbt")
+    
+    all_done >> dbt_task
 
 postgres_to_snowflake_elt_dag = postgres_to_snowflake_elt()
