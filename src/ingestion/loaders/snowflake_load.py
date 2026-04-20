@@ -1,7 +1,7 @@
 import logging
-from common.decorators import measure_time
-from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook
+from src.common.decorators import measure_time
 from src.ingestion.extract.postgres_extractor import extract_data_postgres
+from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook
 
 logger = logging.getLogger(__name__)
 

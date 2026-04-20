@@ -1,5 +1,5 @@
 import logging
-from common.decorators import measure_time
+from src.common.decorators import measure_time
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 logger = logging.getLogger(__name__)
