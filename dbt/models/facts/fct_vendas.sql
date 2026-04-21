@@ -35,5 +35,5 @@ SELECT
     data_atualizacao
 FROM vendas
 {% if is_incremental() %}
-    WHERE data_atualizacao > (SELECT MAX(data_atualizacao) FROM {{ this }})
+    WHERE data_inclusao > (SELECT MAX(data_inclusao) FROM {{ this }})
 {% endif %}
