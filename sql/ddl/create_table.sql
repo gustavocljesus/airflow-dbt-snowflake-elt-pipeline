@@ -1,5 +1,5 @@
 create database novadrive;
-create schema stage;
+create schema raw;
  
 CREATE WAREHOUSE DEFAULT_WH;
  
