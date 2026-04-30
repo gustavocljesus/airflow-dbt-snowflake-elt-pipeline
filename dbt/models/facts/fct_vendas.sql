@@ -6,7 +6,7 @@ WITH vendas AS (
         con.concessionaria_sk,
         ve.vendedor_sk,
         c.cliente_sk,
-        to_date(v.data_venda) AS data_venda_id,
+        dt.data_id AS data_venda_id,
         v.valor_venda, 
         v.data_venda AS data_venda_ts,
         v.data_inclusao,
@@ -20,6 +20,8 @@ WITH vendas AS (
         ON v.id_vendedores = ve.vendedor_id
     JOIN {{ ref('dim_clientes') }} c
         ON v.id_clientes = c.cliente_id
+    JOIN {{ ref('dim_tempo') }} dt 
+        ON to_date(v.data_venda) = dt.data_id
 )
 
 SELECT
