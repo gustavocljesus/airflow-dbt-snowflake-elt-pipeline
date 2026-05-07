@@ -161,7 +161,9 @@ Etapas:
 ├── docs/
 │   ├── architecture/
 │   │   ├── airflow/
-│   │   └── dbt/
+│   │   ├── dbt/
+│   │   └── modelagem/
+│   │       └── operacional/
 │   └── dashboards/
 ├── infra/
 │   ├── bootstrap.sh
