@@ -79,7 +79,6 @@ Etapas:
 
 ![análise temporal](./docs/dashboards/AnáliseTemporal.jpg)
 
-🔗 **Acessar dashboard interativo:** https://datastudio.google.com/s/ugzXZE-XX9s
 
 > Observação: a base de dados possuía dados referentes a alguns dias de abril de 2026 (amostra limitada).
 
@@ -157,7 +156,7 @@ Etapas:
 │   ├── dbt_project.yml
 │   ├── package-lock.yml
 │   ├── packages.yml
-│   └── profiles.yml
+│   └── profiles.yml.example
 ├── docs/
 │   ├── architecture/
 │   │   ├── airflow/
@@ -204,22 +203,27 @@ Etapas:
 
 ```bash
 git clone https://github.com/gustavocljesus/airflow-dbt-snowflake-elt-pipeline.git
+cd airflow-dbt-snowflake-elt-pipeline
 ```
 
-2. Configure as credenciais do Snowflake no dbt (```profiles.yml```)
+2. Configure as credenciais do Snowflake no arquivo `profiles.yml`
 
-3. Suba o ambiente:
+3. Execute o script de bootstrap para preparar o ambiente:
 
 ```bash
-docker compose up -d
+cd infra
+chmod +x bootstrap.sh
+./bootstrap.sh
 ```
 
-4. Acesse o Airflow e execute a DAG
+4. 4. Acesse o Airflow em `http://localhost:8080` e execute a DAG
 
 ---
 
 ## Próximos passos
 
-- Implementar testes de qualidade no dbt (not null, unique, relationships)
-- Melhorar portabilidade com Docker Compose
-- Garantir idempotência no processo de ingestão incremental
+- [ ] Implementar testes de qualidade no dbt (`not null`, `unique`, `relationships`)
+- [ ] Melhorar a portabilidade do ambiente com Docker Compose
+- [ ] Garantir idempotência na ingestão incremental
+- [ ] Substituir a fonte mockada por uma API
+- [ ] Migrar do Google Data Studio para Power BI
