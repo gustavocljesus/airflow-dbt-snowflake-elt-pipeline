@@ -54,8 +54,12 @@ def postgres_to_snowflake_elt():
         loaded >> updated
         all_done.append(updated)
 
-    dbt_task = BashOperator(task_id="dbt_build",
-                        bash_command="cd /opt/airflow/dags/dbt && dbt deps --profiles-dir /opt/airflow/dags/dbt && dbt build --profiles-dir /opt/airflow/dags/dbt")
+    dbt_task = BashOperator(task_id="dbt_build", 
+                            bash_command="""
+                                cd /opt/airflow/dbt
+                                dbt deps --profiles-dir /opt/airflow/dbt
+                                dbt build --profiles-dir /opt/airflow/dbt
+                                """)
     
     all_done >> dbt_task
 
