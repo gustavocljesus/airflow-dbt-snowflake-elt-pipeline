@@ -9,3 +9,6 @@ dbt_packages/
 
 # logs
 logs/
+
+#env
+.env
