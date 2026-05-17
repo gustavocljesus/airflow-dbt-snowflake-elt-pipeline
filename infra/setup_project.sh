@@ -26,17 +26,19 @@ sudo apt update
 echo "Instalando Docker..."
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+
 echo "Criando arquivo .env..."
-echo "AIRFLOW_UID=$(id -u)" > .env
+echo "AIRFLOW_UID=$(id -u)" > "$PROJECT_DIR/.env"
 
 echo "Inicializando Airflow..."
-sudo docker compose up airflow-init
+sudo docker compose -f "$PROJECT_DIR/docker-compose.yaml" up airflow-init
 
 echo "Subindo containers..."
-sudo docker compose up -d
+sudo docker compose -f "$PROJECT_DIR/docker-compose.yaml" up -d
 
 echo "-------------------------------------"
 echo "Airflow disponível em:"
 echo "http://SEU_IP_PUBLICO:8080"
 echo "-------------------------------------"
-EOF
