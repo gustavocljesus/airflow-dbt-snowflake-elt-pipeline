@@ -165,9 +165,7 @@ Etapas:
 │   │       └── operacional/
 │   └── dashboards/
 ├── infra/
-│   ├── bootstrap.sh
-│   ├── setup_airflow.sh
-│   └── setup_project.sh
+│   └── install_docker.sh
 ├── sql/
 │   ├── config/
 │   │   └── snowflake_roles.sql
@@ -183,7 +181,9 @@ Etapas:
 │       │   └── postgres_extractor.py
 │       └── loaders/
 │           └── snowflake_load.py
+├── .env.example
 ├── .gitignore
+├── docker-compose.yaml
 ├── Dockerfile
 ├── README.md
 └── requirements.txt
@@ -206,24 +206,41 @@ git clone https://github.com/gustavocljesus/airflow-dbt-snowflake-elt-pipeline.g
 cd airflow-dbt-snowflake-elt-pipeline
 ```
 
-2. Configure as credenciais do Snowflake no arquivo `profiles.yml`
-
-3. Execute o script de bootstrap para preparar o ambiente:
+2. Configure as credenciais do Snowflake no arquivo `profiles.yml`:
 
 ```bash
-cd infra
-chmod +x bootstrap.sh
-./bootstrap.sh
+cd dbt
+cp profiles.yml.example profiles.yml
+cd ..
 ```
 
-4. 4. Acesse o Airflow em `http://localhost:8080` e execute a DAG
+3. Configure as variáveis de ambiente no arquivo `.env`:
+
+```bash
+cp .env.example .env
+```
+
+4. Suba o ambiente:
+
+```bash
+docker compose up airflow-init
+docker compose up -d
+```
+
+> Caso não tenha docker instalado, execute:
+> ```bash
+> chmod +x infra/install-docker.sh
+> ./infra/install_docker.sh
+> ``` 
+
+5. Acesse o Airflow em `http://localhost:8080` e execute a DAG
 
 ---
 
 ## Próximos passos
 
 - [ ] Implementar testes de qualidade no dbt (`not null`, `unique`, `relationships`)
-- [ ] Melhorar a portabilidade do ambiente com Docker Compose
+- [x] Melhorar a portabilidade do ambiente com Docker Compose
 - [ ] Garantir idempotência na ingestão incremental
 - [ ] Substituir a fonte mockada por uma API
 - [ ] Migrar do Google Data Studio para Power BI
