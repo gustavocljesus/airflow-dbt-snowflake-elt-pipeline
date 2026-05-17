@@ -1,20 +1,42 @@
 #!/bin/bash
 set -e
 
-cd ~/airflow-dbt-snowflake-elt-pipeline
+echo "Atualizando a lista de pacotes do APT..."
+sudo apt update && sudo apt upgrade -y
 
-echo "Movendo arquivos..."
+echo "Instalando dependências..."
+sudo apt install -y ca-certificates curl gnupg lsb-release
 
-cp ./dags/postgres_to_snowflake.py ~/airflow/dags/
-cp ./Dockerfile ~/airflow/
-cp ./requirements.txt ~/airflow/
+echo "Configurando repositório oficial do Docker..."
+sudo mkdir -p /etc/apt/keyrings   
 
-echo "Movendo pastas..."
+if [ ! -f /etc/apt/keyrings/docker.gpg ]; then
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+    sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg   
+fi
 
-cp -r ./src/ ~/airflow/dags/
-cp -r ./dbt/ ~/airflow/dags/
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu \
+$(lsb_release -cs) stable" | \
+sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update
+
+echo "Instalando Docker..."
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+echo "Criando arquivo .env..."
+echo "AIRFLOW_UID=$(id -u)" > .env
+
+echo "Inicializando Airflow..."
+sudo docker compose up airflow-init
+
+echo "Subindo containers..."
+sudo docker compose up -d
 
 echo "-------------------------------------"
 echo "Airflow disponível em:"
 echo "http://SEU_IP_PUBLICO:8080"
 echo "-------------------------------------"
+EOF
