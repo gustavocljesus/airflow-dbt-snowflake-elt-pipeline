@@ -1,0 +1,320 @@
+version: 2
+
+models:
+  
+  #----------------------------------------------------------
+  # stg_cidades
+  #----------------------------------------------------------
+  - name: stg_cidades
+    description: >
+      Limpeza e padronização a partir de raw.cidades. 
+      Padroniza o nome das cidades para começar com letra maiúscula e o restante minúscula com INITCAP,
+      garante que a data atualizada utilize a data de inclusão caso a data de atualização seja nula com COALESCE.
+      Materializado como VIEW.
+    columns:
+      - name: id_cidades
+        description: "Chave primária da cidade"
+        tests:
+          - not_null
+          - unique
+
+      - name: nome_cidade
+        description: "Nome da cidade"
+        tests:
+          - not_null
+
+      - name: id_estados
+        description: "Chave estrangeira para stg_estados, indicando a qual estado a cidade pertence"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_estados')
+              field: id_estados
+
+      - name: data_inclusao
+        description: "Data de inclusão dos dados da cidade"
+        tests:
+          - not_null
+          
+      - name: data_atualizacao
+        description: "Data de atualização dos dados da cidade"
+        tests:
+          - not_null
+
+  #----------------------------------------------------------
+  # stg_clientes
+  #----------------------------------------------------------
+  - name: stg_clientes
+    description: >
+      Limpeza e padronização a partir de raw.clientes. 
+      Padroniza o nome dos clientes para começar com letra maiúscula e o restante minúscula com INITCAP,
+      remove espaços em branco do endereço do cliente com TRIM e 
+      garante que a data atualizada utilize a data de inclusão caso a data de atualização seja nula com COALESCE.
+      Materializado como VIEW.
+    columns:
+      - name: id_clientes
+        description: "Identificador único do cliente"
+        tests:
+          - not_null
+          - unique
+
+      - name: cliente
+        description: "Nome do cliente"
+        tests:
+          - not_null
+
+      - name: endereco
+        description: "Endereço do cliente"
+        tests:
+          - not_null
+      
+      - name: id_concessionarias
+        description: "Chave estrangeira para stg_concessionarias, indicando a qual concessionária o cliente pertence"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_concessionarias')
+              field: id_concessionarias
+
+      - name: data_inclusao
+        description: "Data de inclusão dos dados do cliente"
+        tests:
+          - not_null
+          
+      - name: data_atualizacao
+        description: "Data de atualização dos dados do cliente"
+        tests:
+          - not_null
+
+  #----------------------------------------------------------
+  # stg_concessionarias
+  #----------------------------------------------------------
+  - name: stg_concessionarias
+    description: >
+      Limpeza e padronização a partir de raw.concessionarias.
+      Remove espaços em branco do nome da concessionária com TRIM e
+      garante que a data de atualização utilize a data de inclusão caso seja nula com COALESCE.
+      Materializado como VIEW.
+    columns:
+      - name: id_concessionarias
+        description: "Chave primária da concessionária"
+        tests:
+          - not_null
+          - unique
+
+      - name: nome_concessionaria
+        description: "Nome da concessionária sem espaços extras"
+        tests:
+          - not_null
+
+      - name: id_cidades
+        description: "Chave estrangeira para stg_cidades, indicando a cidade onde a concessionária está localizada"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_cidades')
+              field: id_cidades
+
+      - name: data_inclusao
+        description: "Data de inclusão dos dados da concessionária"
+        tests:
+          - not_null
+
+      - name: data_atualizacao
+        description: "Data de atualização dos dados da concessionária"
+        tests:
+          - not_null
+
+  #----------------------------------------------------------
+  # stg_estados
+  #----------------------------------------------------------
+  - name: stg_estados
+    description: >
+      Limpeza e padronização a partir de raw.estados.
+      Padroniza o nome do estado e a sigla em letras maiúsculas com UPPER e 
+      garante que a data de atualização utilize a data de inclusão caso seja nula com COALESCE.
+      Materializado como VIEW.
+    columns:
+      - name: id_estados
+        description: "Chave primária do estado"
+        tests:
+          - not_null
+          - unique
+
+      - name: estado
+        description: "Nome do estado em letras maiúsculas"
+        tests:
+          - not_null
+          - accepted_values:
+              values: 
+                ['ACRE', 'ALAGOAS', 'AMAPÁ', 'AMAZONAS', 'BAHIA', 'CEARÁ', 'DISTRITO FEDERAL', 'ESPÍRITO SANTO', 'GOIÁS', 'MARANHÃO', 
+                'MATO GROSSO', 'MATO GROSSO DO SUL', 'MINAS GERAIS', 'PARÁ', 'PARAÍBA', 'PARANÁ', 'PERNAMBUCO', 'PIAUÍ', 'RIO DE JANEIRO', 
+                'RIO GRANDE DO NORTE', 'RIO GRANDE DO SUL', 'RONDÔNIA', 'RORAIMA', 'SANTA CATARINA', 'SÃO PAULO', 'SERGIPE', 'TOCANTINS']
+
+      - name: sigla
+        description: "Sigla do estado em letras maiúsculas (ex: SP, RJ, MG)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: 
+                ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 
+                'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 
+                'RR', 'SC', 'SP', 'SE', 'TO']
+
+      - name: data_inclusao
+        description: "Data de inclusão dos dados do estado"
+        tests:
+          - not_null
+
+      - name: data_atualizacao
+        description: "Data de atualização dos dados do estado"
+        tests:
+          - not_null
+
+  #----------------------------------------------------------
+  # stg_veiculos
+  #----------------------------------------------------------
+  - name: stg_veiculos
+    description: >
+      Limpeza e padronização a partir de raw.veiculos.
+      Converte o valor do veículo para DECIMAL(10,2) e garante que a data de
+      atualização utilize a data de inclusão caso a data de atualização seja nula com COALESCE.
+      Materializado como VIEW.
+    columns:
+      - name: id_veiculos
+        description: "Chave primária do veículo"
+        tests:
+          - not_null
+          - unique
+
+      - name: nome
+        description: "Nome do modelo do veículo"
+        tests:
+          - not_null
+
+      - name: tipo
+        description: "Tipo/categoria do veículo"
+        tests:
+          - not_null
+
+      - name: valor
+        description: "Valor do veículo em DECIMAL(10,2)"
+        tests:
+          - not_null
+
+      - name: data_inclusao
+        description: "Data de inclusão dos dados do veículo"
+        tests:
+          - not_null
+
+      - name: data_atualizacao
+        description: "Data de atualização dos dados do veículo"
+        tests:
+          - not_null
+
+  #----------------------------------------------------------
+  # stg_vendas
+  #----------------------------------------------------------
+  - name: stg_vendas
+    description: >
+      Limpeza e padronização a partir de raw.vendas.
+      Converte o valor_pago para DECIMAL(10,2) e renomeia para valor_venda.
+      Garante que a data de atualização utilize a data da venda caso seja nula com COALESCE.
+      Materializado como VIEW.
+    columns:
+      - name: id_vendas
+        description: "Chave primária da venda"
+        tests:
+          - not_null
+          - unique
+
+      - name: id_veiculos
+        description: "Chave estrangeira para stg_veiculos, indicando o veículo vendido"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_veiculos')
+              field: id_veiculos
+
+      - name: id_concessionarias
+        description: "Chave estrangeira para stg_concessionarias, indicando onde ocorreu a venda"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_concessionarias')
+              field: id_concessionarias
+
+      - name: id_vendedores
+        description: "Chave estrangeira para stg_vendedores, indicando o responsável pela venda"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_vendedores')
+              field: id_vendedores
+
+      - name: id_clientes
+        description: "Chave estrangeira para stg_clientes, indicando o comprador"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_clientes')
+              field: id_clientes
+
+      - name: valor_venda
+        description: "Valor pago pela venda em DECIMAL(10,2)"
+        tests:
+          - not_null
+
+      - name: data_venda
+        description: "Data em que a venda foi realizada"
+        tests:
+          - not_null
+
+      - name: data_inclusao
+        description: "Data de inclusão do registro de venda"
+        tests:
+          - not_null
+
+      - name: data_atualizacao
+        description: "Data de atualização do registro de venda"
+        tests:
+          - not_null
+
+  #----------------------------------------------------------
+  # stg_vendedores
+  #----------------------------------------------------------
+  - name: stg_vendedores
+    description: >
+      Limpeza e padronização a partir de raw.vendedores.
+      Padroniza o nome do vendedor para começar com letra maiúscula e o restante minúscula com INITCAP e
+      garante que a data de atualização utilize a data de inclusão caso seja nula com COALESCE.
+      Materializado como VIEW.
+    columns:
+      - name: id_vendedores
+        description: "Chave primária do vendedor"
+        tests:
+          - not_null
+          - unique
+
+      - name: nome_vendedor
+        description: "Nome do vendedor com a primeira letra de cada palavra em maiúsculo"
+        tests:
+          - not_null
+
+      - name: id_concessionarias
+        description: "Chave estrangeira para stg_concessionarias, indicando onde o vendedor trabalha"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_concessionarias')
+              field: id_concessionarias
+
+      - name: data_inclusao
+        description: "Data de inclusão dos dados do vendedor"
+        tests:
+          - not_null
+
+      - name: data_atualizacao
+        description: "Data de atualização dos dados do vendedor"
+        tests:
+          - not_null
