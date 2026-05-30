@@ -5,7 +5,7 @@ WITH source AS (
         UPPER(estado) AS estado,
         UPPER(sigla) AS sigla,
         data_inclusao,
-        data_atualizacao
+        COALESCE(data_atualizacao, data_inclusao) AS data_atualizacao
     FROM {{ source('sources', 'estados') }}
 )
 
