@@ -147,6 +147,7 @@ Etapas:
 │   │   │   ├── stg_veiculos.sql
 │   │   │   ├── stg_vendas.sql
 │   │   │   └── stg_vendedores.sql
+│   │   ├── schema.yml
 │   │   └── source.yml
 │   ├── seeds/
 │   ├── snapshots/
@@ -162,7 +163,6 @@ Etapas:
 │   │   ├── airflow/
 │   │   ├── dbt/
 │   │   └── modelagem/
-│   │       └── operacional/
 │   └── dashboards/
 ├── infra/
 │   └── install_docker.sh
@@ -239,8 +239,6 @@ docker compose up -d
 
 ## Próximos passos
 
-- [ ] Implementar testes de qualidade no dbt (`not null`, `unique`, `relationships`)
+- [x] Implementar testes de qualidade no dbt (`not null`, `unique`, `relationships`)
 - [x] Melhorar a portabilidade do ambiente com Docker Compose
 - [ ] Garantir idempotência na ingestão incremental
-- [ ] Substituir a fonte mockada por uma API
-- [ ] Migrar do Google Data Studio para Power BI
